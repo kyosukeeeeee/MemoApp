@@ -49,7 +49,7 @@ const Signup = ():JSX.Element => {
                 <Button label='Submit' onPress={() => { handlePress(email, password) }} />
                 <View style={styles.footer}>
                     <Text style={styles.footerText}>Already registered?</Text>
-                    <Link href='/auth/Login' asChild>
+                    <Link href='/auth/Login' asChild replace>
                         <TouchableOpacity>
                             <Text style={styles.footerLink}>Log In.</Text>
                         </TouchableOpacity>

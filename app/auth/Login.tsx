@@ -1,21 +1,30 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TextInput, Alert, TouchableOpacity, StyleSheet } from 'react-native'
 import { useState } from 'react'
-
 import { Link, router } from 'expo-router'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
+import { auth } from '../../config'
 import Button from '../../components/Button'
 
-const handlePress = (): void => {
+const handlePress = (email: string, password: string): void => {
     // ログイン
-    
-    router.replace('/memo/List')
+    signInWithEmailAndPassword(auth, email, password)
+        .then((useCredential) => {
+            console.log(useCredential.user.uid)
+            router.replace('/memo/List')
+        })
+        .catch((error) => {
+            const { code, message } = error
+            console.log( code, message)
+            Alert.alert(message)
+        })
 }
 
 const Login = ():JSX.Element => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.inner}>
@@ -36,10 +45,10 @@ const Login = ():JSX.Element => {
                     placeholder='Password'
                     textContentType='password'
                 />
-                <Button label='Submit' onPress={handlePress} />
+                <Button label='Submit' onPress={() => {handlePress(email, password)}} />
                 <View style={styles.footer}>
                     <Text style={styles.footerText}>Not registered?</Text>
-                    <Link href='/auth/Signup' asChild>
+                    <Link href='/auth/Signup' asChild replace>
                         <TouchableOpacity>
                             <Text style={styles.footerLink}>Sign up here!</Text>
                         </TouchableOpacity>
