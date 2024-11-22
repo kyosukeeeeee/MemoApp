@@ -1,4 +1,4 @@
-import { View, TextInput, Alert, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import { View, TextInput, Alert, StyleSheet } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
 import { useState, useEffect } from 'react'
@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import CircleButton from '../../components/CircleButton'
 import Icon from '../../components/Icon'
 import { auth, db } from '../../config'
+import KeyboardSafeView from '../../components/KeyboardAvoidingView'
 
 const handlePress = (id: string, bodyText: string): void => {
     if(auth.currentUser === null) return
@@ -40,19 +41,20 @@ const Edit = (): JSX.Element => {
     }, [])
 
     return (
-        <KeyboardAvoidingView behavior='height' style={styles.container}>
+        <KeyboardSafeView style={styles.container}>
             <View style={styles.inputConrainer}>
                 <TextInput 
                     style={styles.input} 
                     multiline 
                     value={bodyText} 
                     onChangeText={(text) => { setBodyText(text) }}
+                    autoFocus
                 />
             </View>
             <CircleButton onPress={() => { handlePress(id, bodyText) }}>
                 <Icon name='check' size={40} color='#FFFFFF' />
             </CircleButton>
-        </KeyboardAvoidingView>
+        </KeyboardSafeView>
     )
 }
 
